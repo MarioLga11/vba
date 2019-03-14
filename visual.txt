@@ -1,0 +1,115 @@
+
+' macroPrueba2Eliminar()      -> Elimina filas en blanco hasta cierto rango
+' ordenarPrueba2()            -> Ordena por fecha y luego por hora
+' borrarDatosConBusqueda()    -> Borra los encabezados de más hasta cierto rango
+' -------------------------------------------------------------------------
+
+Sub macroPrueba2Eliminar()
+'
+' macroPrueba2Eliminar Macro
+'
+'
+    Columns("B:G").Select
+    Selection.SpecialCells(xlCellTypeBlanks).Select
+    Selection.Delete Shift:=xlUp
+End Sub
+Sub filtroMacroPrueba()
+'
+' filtroMacroPrueba Macro
+'
+'
+    Dim nombrePagina As String
+    nombrePagina = ActiveSheet.Name
+    Columns("B:G").Select
+    ActiveWorkbook.Worksheets(nombrePagina).Sort.SortFields.Clear
+    ActiveWorkbook.Worksheets(nombrePagina).Sort.SortFields.Add2 Key:=Range( _
+        "E2:E1419"), SortOn:=xlSortOnValues, Order:=xlAscending, DataOption:= _
+        xlSortNormal
+    ActiveWorkbook.Worksheets(nombrePagina).Sort.SortFields.Add2 Key:=Range( _
+        "F2:F1419"), SortOn:=xlSortOnValues, Order:=xlAscending, DataOption:= _
+        xlSortNormal
+    With ActiveWorkbook.Worksheets(nombrePagina).Sort
+        .SetRange Range("B1:G1419")
+        .Header = xlYes
+        .MatchCase = False
+        .Orientation = xlTopToBottom
+        .SortMethod = xlPinYin
+        .Apply
+    End With
+
+End Sub
+
+
+Sub borrarDatosConBusqueda()
+'
+' borrarDatosConBusqueda Macro
+'
+'
+Dim texto, palabra As String
+Range("B2").Select
+Do While ActiveCell.Address <> "$B$1500"
+palabra = ActiveCell.Text
+If (palabra = " SLoc" Or palabra = "*") Then
+Selection.EntireRow.Delete
+Else
+ActiveCell.Offset(1, 0).Select
+End If
+Loop
+
+End Sub
+
+
+Sub borrarHoras()
+'
+' borrarDatosConBusqueda Macro
+'
+'
+Dim texto, palabra As String
+Range("F2").Select
+Do While ActiveCell.Address <> "$F$1500"
+palabra = ActiveCell.Text
+palabra2 = Left(palabra, 2)
+If (palabra2 = "08") Then
+    Exit Do
+ElseIf (palabra2 <> "08") Then
+    Selection.EntireRow.Delete
+Else
+    ActiveCell.Offset(1, 0).Select
+End If
+
+
+Loop
+
+End Sub
+
+Sub MakeAbsolute()
+        Dim c As Range
+        Dim rngToAbs As Range
+
+        Set rngToAbs = Range("D2:D1500")
+
+        For Each c In rngToAbs
+                If (c.Value = "" Or c.Value = " ") Then
+                    Exit For
+                End If
+                c.Value = Abs(c.Value)
+        Next c
+End Sub
+
+Sub borrarDatos262()
+'
+' borrarDatosConBusqueda Macro
+'
+'
+Dim texto, palabra As String
+Range("G2").Select
+Do While ActiveCell.Address <> "$G$1500"
+palabra = ActiveCell.Text
+If (palabra = "262") Then
+Selection.EntireRow.Delete
+Else
+ActiveCell.Offset(1, 0).Select
+End If
+Loop
+
+End Sub
